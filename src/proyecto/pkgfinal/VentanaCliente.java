@@ -9,7 +9,32 @@ package proyecto.pkgfinal;
  * @author sebas
  */
 public class VentanaCliente extends javax.swing.JFrame {
+    private java.util.ArrayList<Cliente> leerClientes() {
+            java.util.ArrayList<Cliente> lista = new java.util.ArrayList<Cliente>();
+            java.io.File f = new java.io.File("clientes.clientes");
+            if (!f.exists()) return lista;
 
+            java.io.ObjectInputStream ois = null;
+            try {
+                ois = new java.io.ObjectInputStream(new java.io.FileInputStream(f));
+                Object obj = ois.readObject();
+                if (obj instanceof java.util.ArrayList) {
+                    lista = (java.util.ArrayList<Cliente>) obj;
+                }
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Error al leer archivo de clientes.");
+            } finally {
+                try { if (ois != null) ois.close(); } catch (Exception ex) {}
+            }
+            return lista;
+        }
+    private void guardarClientes(java.util.ArrayList<Cliente> lista) {
+        try (java.io.ObjectOutputStream oos = new java.io.ObjectOutputStream(new java.io.FileOutputStream("clientes.clientes"))) {
+            oos.writeObject(lista);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al guardar archivo de clientes.");
+        }
+    }
     /**
      * Creates new form VentanaMenuPrincipal
      */
@@ -41,23 +66,28 @@ public class VentanaCliente extends javax.swing.JFrame {
 
         jLabel2.setText("Clientes");
 
-        jButton1.setText("Crear/Manejar Cliente");
+        jButton1.setText("Crear nuevo Cliente");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Manejar Inventario");
+        jButton2.setText("Actualizar Cliente");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Crear Factura");
+        jButton3.setText("Eliminar Cliente");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Log-out");
+        jButton4.setText("Volver");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -69,14 +99,14 @@ public class VentanaCliente extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
                         .addComponent(jLabel1)))
                 .addGap(145, 145, 145))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -87,10 +117,13 @@ public class VentanaCliente extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(jButton4)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
@@ -106,18 +139,80 @@ public class VentanaCliente extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+            String nombreBuscado = javax.swing.JOptionPane.showInputDialog(this, "Ingrese el nombre del cliente que desea eliminar:");
+
+       if (nombreBuscado == null || nombreBuscado.trim().equals("")) {
+           javax.swing.JOptionPane.showMessageDialog(this, "Debe ingresar un nombre válido.");
+           return;
+       }
+
+       
+       java.util.ArrayList<Cliente> lista = leerClientes();
+       boolean eliminado = false;
+
+      
+       for (int i = 0; i < lista.size(); i++) {
+           Cliente c = lista.get(i);
+           if (c != null && c.getNombre() != null && c.getNombre().equalsIgnoreCase(nombreBuscado.trim())) {
+               lista.remove(i);
+               eliminado = true;
+               break;
+           }
+       }
+
+       if (eliminado) {
+          
+           guardarClientes(lista);
+           javax.swing.JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.");
+       } else {
+           javax.swing.JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese nombre.");
+       }
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        VentanaLogin login = new VentanaLogin();
-        login.setVisible(true);
-        this.dispose(); 
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        VentanaCrearCliente vcreate = new VentanaCrearCliente();
+        vcreate.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+String nombreBuscado = javax.swing.JOptionPane.showInputDialog(this, "Ingrese el nombre del cliente que desea actualizar:");
+
+    if (nombreBuscado == null || nombreBuscado.trim().equals("")) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Debe ingresar un nombre válido.");
+        return;
+    }
+
+    
+    java.util.ArrayList<Cliente> lista = leerClientes();
+    Cliente encontrado = null;
+
+    for (Cliente c : lista) {
+        if (c != null && c.nombre.equalsIgnoreCase(nombreBuscado.trim())) {
+            encontrado = c;
+            break;
+        }
+    }
+
+    if (encontrado != null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Cliente encontrado: " + encontrado.nombre);
+
+        
+        VentanaActualizarCliente vactualizar = new VentanaActualizarCliente(encontrado);
+        vactualizar.setVisible(true);
+
+        
+        this.dispose();
+    } else {
+        javax.swing.JOptionPane.showMessageDialog(this, "No se encontró un cliente con ese nombre.");
+    }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        VentanaMenuPrincipal menu = new VentanaMenuPrincipal();
+            menu.setVisible(true);
+            this.dispose();
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

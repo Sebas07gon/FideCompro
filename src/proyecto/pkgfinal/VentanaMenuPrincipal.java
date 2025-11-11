@@ -42,6 +42,11 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         jLabel2.setText("Menú Principal");
 
         jButton1.setText("Crear/Manejar Cliente");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Manejar Inventario");
 
@@ -110,6 +115,12 @@ public class VentanaMenuPrincipal extends javax.swing.JFrame {
         login.setVisible(true);
         this.dispose(); 
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        VentanaCliente vcliente = new VentanaCliente();
+        vcliente.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
