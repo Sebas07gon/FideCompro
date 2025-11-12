@@ -151,13 +151,13 @@ public class VentanaCrearCliente extends javax.swing.JFrame {
                 return;
             }
 
-            String id = "C" + java.lang.System.currentTimeMillis();
-            Cliente c = new Cliente(id, nombre, identificacion, telefono, email, direccion);
+            
+            Cliente c = new Cliente("", nombre, identificacion, telefono, email, direccion);
             c.crearCliente();
 
             javax.swing.JOptionPane.showMessageDialog(this, "Cliente creado correctamente.");
             
-            // Limpia los campos
+         
             jTextField1.setText("");
             jTextField2.setText("");
             jTextField3.setText("");

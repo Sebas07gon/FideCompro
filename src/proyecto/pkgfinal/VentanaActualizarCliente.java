@@ -134,17 +134,17 @@ public class VentanaActualizarCliente extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         try {
-            // Actualizar los valores del cliente con los del formulario
+            
             cliente.setNombre(jTextField1.getText().trim());
             cliente.setIdentificacion(Integer.parseInt(jTextField3.getText().trim()));
             cliente.setTelefono(Integer.parseInt(jTextField2.getText().trim()));
             cliente.setEmail(jTextField5.getText().trim());
             cliente.setDireccion(jTextField4.getText().trim());
 
-            // Leer lista actual
+            
             java.util.ArrayList<Cliente> lista = leerClientes();
 
-            // Buscar el cliente y reemplazar
+            
             boolean actualizado = false;
             for (int i = 0; i < lista.size(); i++) {
                 if (lista.get(i).getID().equals(cliente.getID())) {
@@ -157,6 +157,8 @@ public class VentanaActualizarCliente extends javax.swing.JFrame {
             if (actualizado) {
                 guardarClientes(lista);
                 javax.swing.JOptionPane.showMessageDialog(this, "Cliente actualizado correctamente.");
+                VentanaCliente vcliente = new VentanaCliente();
+                vcliente.setVisible(true);
                 this.dispose();
             } else {
                 javax.swing.JOptionPane.showMessageDialog(this, "No se encontró el cliente en la lista.");

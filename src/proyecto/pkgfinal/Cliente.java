@@ -86,6 +86,8 @@ private static final String ARCHIVO = "clientes.clientes";
     }
     public void crearCliente() {
         java.util.ArrayList<Cliente> lista = leerClientes();
+        int nuevoID = lista.size() + 1;
+        this.ID = "C" + nuevoID;
         lista.add(this);
         guardarClientes(lista);
         javax.swing.JOptionPane.showMessageDialog(null, "Cliente creado y guardado correctamente.");
